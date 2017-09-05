@@ -1,3 +1,5 @@
-# linux-kde-wifi-connect
+# WiFi Connector for Linux KDE
 
-This is a Java-GUI-based software which helps you to connect to a WiFi network you choose.
+
+
+

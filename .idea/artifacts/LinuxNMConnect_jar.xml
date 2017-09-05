@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="LinuxNMConnect:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/LinuxNMConnect_jar</output-path>
+    <root id="archive" name="LinuxNMConnect.jar">
+      <element id="module-output" name="LinuxNMConnect" />
+    </root>
+  </artifact>
+</component>

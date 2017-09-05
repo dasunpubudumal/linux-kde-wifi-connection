@@ -16,9 +16,13 @@ public class LinuxNM {
     private JLabel lblDescription;
     private JButton aboutButton;
     private JTextField txtPassword;
+    private JButton btnCheckStatus;
+    private JButton btnExit;
     static String output;
     static String error;
     static String response;
+    static ImageIcon img;
+    JFrame frame;
 
     public LinuxNM() {  //Constructor
 
@@ -44,7 +48,21 @@ public class LinuxNM {
         aboutButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                JOptionPane.showMessageDialog(null,"This was created to resolve the issues " +
+                        "in new KDE Plasma 5.9\nwhere the Network Monitor not being present.\n \nCreated by Dasun Pubudumal.\nDate: 5/09/2017","About",JOptionPane.QUESTION_MESSAGE);
+            }
+        });
+        btnCheckStatus.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                executeCommand("nmcli -p g",true);
+                displayOutput();
+            }
+        });
+        btnExit.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.exit(0);
             }
         });
     }
@@ -69,17 +87,16 @@ public class LinuxNM {
 //                System.out.println("Exit status" + shellExitStatus);
 
                 response = convertStreamToStr(shellIn);
-                System.out.println(response);
+//                System.out.println(response);
                 displayOutput();
                 shellIn.close();
             }
-
         }
 
         catch (IOException e) {
 //            System.out.println("Error occured while executing Linux command. Error Description: "
 //                    + e.getMessage());
-            displayError(e.getMessage());
+            displayError(e.getMessage());   //If there are any error, they will be displayed in the terminal output.
         }
 
         catch (InterruptedException e) {
@@ -124,10 +141,14 @@ public class LinuxNM {
 
     public static void main(String[] args) throws IOException {
 
+        img = new ImageIcon("./networking.png");
+
         JFrame frame = new JFrame("Linux Network Connector");
-        frame.setSize(900,500);
+        frame.setSize(900,600);
         frame.setContentPane(new LinuxNM().panel1);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setResizable(false);
+        frame.setIconImage(img.getImage());
         frame.setVisible(true);
 
     }
@@ -137,5 +158,8 @@ public class LinuxNM {
         terminalOutput.setSize(800,100);
         terminalOutput.setFont(new Font("DejaVu Sans Mono", Font.BOLD, 16));
         terminalOutput.setEditable(false);
+        terminalOutput.setForeground(Color.green);
+        terminalOutput.setLineWrap(true);
+
     }
 }
