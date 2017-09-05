@@ -1,3 +1,3 @@
 # linux-kde-wifi-connect
 
-Sample Readme
+This is a Java-GUI-based software which helps you to connect to a WiFi network you choose.
