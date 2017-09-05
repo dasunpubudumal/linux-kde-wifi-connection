@@ -2,9 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 
 public class LinuxNM {
     private JPanel panel1;
@@ -13,17 +11,18 @@ public class LinuxNM {
     private JLabel lblTerminalOutput;
     private JButton displayUUID;
     private JFormattedTextField formattedTextField1;
-    private JTextField insertUUID;
+    private JTextField insertSSID;
     private JTextArea terminalOutput;
     private JLabel lblDescription;
     private JButton aboutButton;
     private JTextField txtPassword;
     static String output;
     static String error;
+    static String response;
 
     public LinuxNM() {  //Constructor
 
-        insertUUID.setHorizontalAlignment(JTextField.CENTER);
+        insertSSID.setHorizontalAlignment(JTextField.CENTER);
         terminalOutput.setSize(800,100);
         terminalOutput.setFont(new Font("DejaVu Sans Mono", Font.BOLD, 16));
         terminalOutput.setEditable(false);
@@ -31,11 +30,7 @@ public class LinuxNM {
         displayUUID.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                try {
-                    executeCommand("nmcli d wifi");
-                } catch (IOException e1) {
-                    e1.printStackTrace();
-                }
+                executeCommand("nmcli d wifi", true);
                 displayOutput();
             }
         });
@@ -43,15 +38,11 @@ public class LinuxNM {
         connectButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                try {
-                    System.out.println(insertUUID.getText());
-                    executeCommand("nmcli d wifi connect " + insertUUID.getText()+ " password " + txtPassword.getText().toString() + "");
+//                    /
+                    //SString value = " \"ROM\" ";
+                    executeCommand("nmcli d wifi connect \"" + insertSSID.getText() +  "\" password " + txtPassword.getText(), true);
 //                    nmcli d wifi connect EEE password '12345678901234567890123456'
 
-                    displayOutput();
-                } catch (IOException e1) {
-                    e1.printStackTrace();
-                }
             }
         });
         aboutButton.addActionListener(new ActionListener() {
@@ -62,50 +53,82 @@ public class LinuxNM {
         });
     }
 
-    private static void executeCommand(String command) throws IOException{
+    public String executeCommand(String command, boolean waitForResponse) {
 
-        output = "";
-        error = "";
+        response = "";
 
-        Process proc = Runtime.getRuntime().exec(command);  //Runs the command.
+        ProcessBuilder pb = new ProcessBuilder("bash", "-c", command);
+        pb.redirectErrorStream(true);
 
-        BufferedReader stdOut = new BufferedReader(new
-                InputStreamReader(proc.getInputStream())); //Reads the output for the command.
+        System.out.println("Linux command: " + command);
 
-        BufferedReader stdError = new BufferedReader(new
-                InputStreamReader(proc.getErrorStream()));
+        try {
+            Process shell = pb.start();
 
-        // read the output from the command
-        String o = null;
-        String e = null;
+            if (waitForResponse) {
+                // To capture output from the shell
+                InputStream shellIn = shell.getInputStream();
 
-        while ((o = stdOut.readLine()) != null) {
-            output  = output.concat(o) + "\n";
-            //System.out.println(o);;
+                // Wait for the shell to finish and get the return code
+                int shellExitStatus = shell.waitFor();
+                System.out.println("Exit status" + shellExitStatus);
+
+                response = convertStreamToStr(shellIn);
+                System.out.println(response);
+                displayOutput();
+                shellIn.close();
+            }
+
         }
 
-        // read any errors from the attempted command
-        //System.out.println("Here is the standard error of the command (if any):\n");
-        while ((e = stdError.readLine()) != null) {
-            error = error.concat(e);
-            //System.out.println(e);
+        catch (IOException e) {
+            System.out.println("Error occured while executing Linux command. Error Description: "
+                    + e.getMessage());
+            displayError(e.getMessage());
+        }
+
+        catch (InterruptedException e) {
+            System.out.println("Error occured while executing Linux command. Error Description: "
+                    + e.getMessage());
+            displayError(e.getMessage());
+        }
+
+        return response;
+    }
+
+    public static String convertStreamToStr(InputStream is) throws IOException {
+
+        if (is != null) {
+            Writer writer = new StringWriter();
+
+            char[] buffer = new char[1024];
+            try {
+                Reader reader = new BufferedReader(new InputStreamReader(is,
+                        "UTF-8"));
+                int n;
+                while ((n = reader.read(buffer)) != -1) {
+                    writer.write(buffer, 0, n);
+                }
+            } finally {
+                is.close();
+            }
+            return writer.toString();
+        }
+        else {
+            return "";
         }
     }
 
     private void displayOutput(){
+        terminalOutput.setText(response);
+    }
 
-        if((output != "")){
-            System.out.println("OUTPUT:\n".concat(output));
-        }
-
-        if((error != "")){
-            System.out.println("ERROR!".concat(error));
-        }
-        terminalOutput.setText(output.concat("\n").concat(error));
-
+    private void displayError(String error){
+        terminalOutput.setText(error);
     }
 
     public static void main(String[] args) throws IOException {
+
         JFrame frame = new JFrame("Linux Network Connector");
         frame.setSize(900,500);
         frame.setContentPane(new LinuxNM().panel1);
