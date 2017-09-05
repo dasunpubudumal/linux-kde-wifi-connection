@@ -13,8 +13,9 @@ public class LinuxNM {
     private JLabel lblTerminalOutput;
     private JButton displayUUID;
     private JFormattedTextField formattedTextField1;
-    private JTextField textField1;
+    private JTextField insertUUID;
     private JTextArea terminalOutput;
+    private JLabel lblDescription;
     static String output;
     static String error;
 
@@ -31,9 +32,16 @@ public class LinuxNM {
             }
         });
 
+        insertUUID.setHorizontalAlignment(JTextField.CENTER);
         terminalOutput.setSize(800,100);
-    }
 
+        connectButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+    }
 
     private static void executeCommand(String command) throws IOException{
 
@@ -63,8 +71,6 @@ public class LinuxNM {
             error = error.concat(e);
             //System.out.println(e);
         }
-
-
     }
 
     private void displayOutput(){
@@ -83,8 +89,6 @@ public class LinuxNM {
     }
 
     public static void main(String[] args) throws IOException {
-
-//        System.out.println(output);
 
         JFrame frame = new JFrame("Linux Network Connector");
         frame.setSize(900,300);
