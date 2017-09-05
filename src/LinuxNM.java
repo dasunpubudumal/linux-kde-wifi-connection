@@ -16,13 +16,13 @@ public class LinuxNM {
     private JTextField insertUUID;
     private JTextArea terminalOutput;
     private JLabel lblDescription;
+    private JButton aboutButton;
     static String output;
     static String error;
 
-    public LinuxNM() {
+    public LinuxNM() {  //Constructor
 
         insertUUID.setHorizontalAlignment(JTextField.CENTER);
-
         terminalOutput.setSize(800,100);
         terminalOutput.setFont(new Font("DejaVu Sans Mono", Font.BOLD, 16));
         terminalOutput.setEditable(false);
@@ -31,7 +31,7 @@ public class LinuxNM {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    executeCommand("nmcli c");
+                    executeCommand("nmcli co show --a");
                 } catch (IOException e1) {
                     e1.printStackTrace();
                 }
@@ -40,6 +40,17 @@ public class LinuxNM {
         });
 
         connectButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    executeCommand("nmcli d connect ".concat(insertUUID.getText().toString()));
+                    displayOutput();
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        });
+        aboutButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
 
@@ -86,12 +97,11 @@ public class LinuxNM {
         if((error != "")){
             System.out.println("ERROR!".concat(error));
         }
-        terminalOutput.setText(output);
+        terminalOutput.setText(output.concat("\n").concat(error));
 
     }
 
     public static void main(String[] args) throws IOException {
-
         JFrame frame = new JFrame("Linux Network Connector");
         frame.setSize(900,300);
         frame.setContentPane(new LinuxNM().panel1);
