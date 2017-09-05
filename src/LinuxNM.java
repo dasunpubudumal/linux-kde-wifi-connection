@@ -22,10 +22,7 @@ public class LinuxNM {
 
     public LinuxNM() {  //Constructor
 
-        insertSSID.setHorizontalAlignment(JTextField.CENTER);
-        terminalOutput.setSize(800,100);
-        terminalOutput.setFont(new Font("DejaVu Sans Mono", Font.BOLD, 16));
-        terminalOutput.setEditable(false);
+        initializeComponents(); //Initializes form components.
 
         displayUUID.addActionListener(new ActionListener() {
             @Override
@@ -42,7 +39,6 @@ public class LinuxNM {
                     //SString value = " \"ROM\" ";
                     executeCommand("nmcli d wifi connect \"" + insertSSID.getText() +  "\" password " + txtPassword.getText(), true);
 //                    nmcli d wifi connect EEE password '12345678901234567890123456'
-
             }
         });
         aboutButton.addActionListener(new ActionListener() {
@@ -60,8 +56,7 @@ public class LinuxNM {
         ProcessBuilder pb = new ProcessBuilder("bash", "-c", command);
         pb.redirectErrorStream(true);
 
-        System.out.println("Linux command: " + command);
-
+//        System.out.println("Linux command: " + command);
         try {
             Process shell = pb.start();
 
@@ -71,7 +66,7 @@ public class LinuxNM {
 
                 // Wait for the shell to finish and get the return code
                 int shellExitStatus = shell.waitFor();
-                System.out.println("Exit status" + shellExitStatus);
+//                System.out.println("Exit status" + shellExitStatus);
 
                 response = convertStreamToStr(shellIn);
                 System.out.println(response);
@@ -82,14 +77,14 @@ public class LinuxNM {
         }
 
         catch (IOException e) {
-            System.out.println("Error occured while executing Linux command. Error Description: "
-                    + e.getMessage());
+//            System.out.println("Error occured while executing Linux command. Error Description: "
+//                    + e.getMessage());
             displayError(e.getMessage());
         }
 
         catch (InterruptedException e) {
-            System.out.println("Error occured while executing Linux command. Error Description: "
-                    + e.getMessage());
+//            System.out.println("Error occured while executing Linux command. Error Description: "
+//                    + e.getMessage());
             displayError(e.getMessage());
         }
 
@@ -135,5 +130,12 @@ public class LinuxNM {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
 
+    }
+
+    public void initializeComponents(){
+        insertSSID.setHorizontalAlignment(JTextField.CENTER);
+        terminalOutput.setSize(800,100);
+        terminalOutput.setFont(new Font("DejaVu Sans Mono", Font.BOLD, 16));
+        terminalOutput.setEditable(false);
     }
 }
