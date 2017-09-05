@@ -20,6 +20,13 @@ public class LinuxNM {
     static String error;
 
     public LinuxNM() {
+
+        insertUUID.setHorizontalAlignment(JTextField.CENTER);
+
+        terminalOutput.setSize(800,100);
+        terminalOutput.setFont(new Font("DejaVu Sans Mono", Font.BOLD, 16));
+        terminalOutput.setEditable(false);
+
         displayUUID.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -31,9 +38,6 @@ public class LinuxNM {
                 displayOutput();
             }
         });
-
-        insertUUID.setHorizontalAlignment(JTextField.CENTER);
-        terminalOutput.setSize(800,100);
 
         connectButton.addActionListener(new ActionListener() {
             @Override
@@ -82,10 +86,8 @@ public class LinuxNM {
         if((error != "")){
             System.out.println("ERROR!".concat(error));
         }
-
-        terminalOutput.setFont(new Font("DejaVu Sans Mono", Font.BOLD, 16));
         terminalOutput.setText(output);
-        terminalOutput.setEditable(false);
+
     }
 
     public static void main(String[] args) throws IOException {
@@ -94,7 +96,7 @@ public class LinuxNM {
         frame.setSize(900,300);
         frame.setContentPane(new LinuxNM().panel1);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//        frame.pack();
         frame.setVisible(true);
+
     }
 }
