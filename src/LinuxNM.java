@@ -32,21 +32,25 @@ public class LinuxNM {
         }
 
         // read any errors from the attempted command
-        System.out.println("Here is the standard error of the command (if any):\n");
+        //System.out.println("Here is the standard error of the command (if any):\n");
         while ((e = stdError.readLine()) != null) {
             error = error.concat(e);
             //System.out.println(e);
         }
 
-        System.out.println(output);
-        System.out.println(error);
+        if((output != "")){
+            System.out.println("OUTPUT:\n".concat(output));
+        }
+
+        if((error != "")){
+            System.out.println("ERROR!".concat(error));
+        }
 
     }
 
-
     public static void main(String[] args) throws IOException {
 
-        executeCommand("nmcli c");
+        executeCommand("sudo apt-get update");
 
 
     }
