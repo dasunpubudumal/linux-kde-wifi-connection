@@ -50,7 +50,7 @@ public class LinuxNM {
 
     public static void main(String[] args) throws IOException {
 
-        executeCommand("sudo apt-get update");
+        executeCommand("nmcli c");
 
 
     }
