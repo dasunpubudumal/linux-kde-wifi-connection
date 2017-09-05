@@ -17,6 +17,7 @@ public class LinuxNM {
     private JTextArea terminalOutput;
     private JLabel lblDescription;
     private JButton aboutButton;
+    private JTextField txtPassword;
     static String output;
     static String error;
 
@@ -31,7 +32,7 @@ public class LinuxNM {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    executeCommand("nmcli co show --a");
+                    executeCommand("nmcli d wifi");
                 } catch (IOException e1) {
                     e1.printStackTrace();
                 }
@@ -43,7 +44,10 @@ public class LinuxNM {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    executeCommand("nmcli d connect ".concat(insertUUID.getText().toString()));
+                    System.out.println(insertUUID.getText());
+                    executeCommand("nmcli d wifi connect " + insertUUID.getText()+ " password " + txtPassword.getText().toString() + "");
+//                    nmcli d wifi connect EEE password '12345678901234567890123456'
+
                     displayOutput();
                 } catch (IOException e1) {
                     e1.printStackTrace();
@@ -103,7 +107,7 @@ public class LinuxNM {
 
     public static void main(String[] args) throws IOException {
         JFrame frame = new JFrame("Linux Network Connector");
-        frame.setSize(900,300);
+        frame.setSize(900,500);
         frame.setContentPane(new LinuxNM().panel1);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
