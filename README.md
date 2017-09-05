@@ -2,7 +2,7 @@
 
 This is a simple Java application designed to connect to a WiFi Network.
 
-## Running the application ##.
+## Running the application.
 
 Download [this file](https://drive.google.com/file/d/0B5oYpiUn-vu8RVJlRkxKOFFkeU0/view?usp=sharing) and execute is as a ```.run``` file. i.e. either double click on it or do ```./LinuxNMConnect``` on a terminal.
 
