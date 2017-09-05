@@ -1,13 +1,39 @@
 import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
 public class LinuxNM {
     private JPanel panel1;
-    private JButton button1;
+    private JButton connectButton;
+    private JLabel lblTitle;
+    private JLabel lblTerminalOutput;
+    private JButton displayUUID;
+    private JFormattedTextField formattedTextField1;
+    private JTextField textField1;
+    private JTextArea terminalOutput;
     static String output;
     static String error;
+
+    public LinuxNM() {
+        displayUUID.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    executeCommand("nmcli c");
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
+                displayOutput();
+            }
+        });
+
+        terminalOutput.setSize(800,100);
+    }
+
 
     private static void executeCommand(String command) throws IOException{
 
@@ -38,6 +64,11 @@ public class LinuxNM {
             //System.out.println(e);
         }
 
+
+    }
+
+    private void displayOutput(){
+
         if((output != "")){
             System.out.println("OUTPUT:\n".concat(output));
         }
@@ -46,12 +77,20 @@ public class LinuxNM {
             System.out.println("ERROR!".concat(error));
         }
 
+        terminalOutput.setFont(new Font("DejaVu Sans Mono", Font.BOLD, 16));
+        terminalOutput.setText(output);
+        terminalOutput.setEditable(false);
     }
 
     public static void main(String[] args) throws IOException {
 
-        executeCommand("nmcli c");
+//        System.out.println(output);
 
-
+        JFrame frame = new JFrame("Linux Network Connector");
+        frame.setSize(900,300);
+        frame.setContentPane(new LinuxNM().panel1);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//        frame.pack();
+        frame.setVisible(true);
     }
 }
