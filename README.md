@@ -6,7 +6,7 @@ This is a simple Java application designed to connect to a WiFi Network.
 
 Download [this file](https://drive.google.com/file/d/0B5oYpiUn-vu8RVJlRkxKOFFkeU0/view?usp=sharing) and execute is as a ```.run``` file. i.e. either double click on it or do ```./LinuxNMConnect.run``` on a terminal.
 
-##Using the application
+## Using the application
 
 * Use Display UUID button to get the details of available WiFi access points includuing the UUID.
 * Use Ctrl C + Ctrl V to copy and paste the UUID into the text field.
