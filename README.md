@@ -1,6 +1,6 @@
 # WiFi Connector for Linux KDE
 
-This is a simple Java application designed to connect to a WiFi Network.
+This is a simple Java application designed to connect to a WiFi Network. Refer to my [blogpost](https://dasunpubudu.wordpress.com)
 
 ## Running the application.
 
